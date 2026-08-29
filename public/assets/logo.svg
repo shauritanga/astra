@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="330 355 700 355">
+  <defs>
+    <style>
+      .an-text {
+        fill: #fff;
+        font-family: Helvetica, Arial, sans-serif;
+        font-size: 53.8px;
+        font-weight: 700;
+        letter-spacing: -.02em;
+      }
+      .an-mark {
+        fill: #f4a21e;
+      }
+    </style>
+  </defs>
+  <text class="an-text" transform="translate(349.52 678.97)"><tspan x="0" y="0">Astra Nova Holdings Ltd</tspan></text>
+  <g>
+    <polygon class="an-mark" points="582.9 554.75 582.9 468.16 621.45 533.78 621.45 623.41 577.15 623.41 486.16 468.16 418.51 582.82 507.47 582.82 530.47 623.41 349.52 623.41 485.48 389.36 582.9 554.75"/>
+    <polygon class="an-mark" points="584.25 389.36 718.86 623.41 763.51 623.41 763.51 389.36 724.61 389.36 724.61 554.75 629.57 389.36 584.25 389.36"/>
+  </g>
+</svg>

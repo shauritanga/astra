@@ -1,0 +1,218 @@
+import { useState, type FormEvent } from 'react'
+import {
+  Headset,
+  ShieldCheck,
+  Handshake,
+  Lock,
+  MapPin,
+  Phone,
+  Mail,
+  Clock,
+  ArrowRight,
+  Truck,
+  Globe,
+  ClipboardList,
+  HardHat,
+  MessageCircle,
+} from 'lucide-react'
+import { motion } from 'framer-motion'
+import Reveal from '../components/Reveal'
+
+const trust = [
+  { icon: Headset, label: 'Responsive Team' },
+  { icon: ShieldCheck, label: 'Reliable Solutions' },
+  { icon: Handshake, label: 'Strong Partnerships' },
+  { icon: Lock, label: 'Your Cargo, Our Priority' },
+]
+
+const info = [
+  { icon: MapPin, title: 'Head Office', lines: ['P.O. Box 8676,', 'Dar es Salaam, Tanzania'] },
+  { icon: Phone, title: 'Phone', lines: ['+255 000 000 000'] },
+  { icon: Mail, title: 'Email', lines: ['operations@astranova.co.tz'] },
+  { icon: Clock, title: 'Business Hours', lines: ['Mon – Fri: 08:00 AM – 05:00 PM (EAT)', 'Saturday: 09:00 AM – 01:00 PM (EAT)'] },
+]
+
+const bottomStrip = [
+  { icon: Truck, title: 'Road Freight', desc: 'Reliable truck transport across East and Southern Africa.' },
+  { icon: Globe, title: 'Cross Border Cargo', desc: 'Seamless cargo movement across regional borders with care.' },
+  { icon: ClipboardList, title: 'Logistics Coordination', desc: 'End-to-end planning and coordination for smooth operations.' },
+  { icon: HardHat, title: 'Mining Supply Solutions', desc: 'Quality mining gear and supplies to keep your operations moving.' },
+  { icon: MessageCircle, title: "Let's Talk Logistics", desc: "We're ready to discuss how we can support your business." },
+]
+
+const inputClass =
+  'w-full rounded-md border border-slate-300 bg-white px-4 py-2.5 text-sm text-navy-900 placeholder:text-slate-400 focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/30'
+
+export default function ContactUs() {
+  const [submitted, setSubmitted] = useState(false)
+
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    setSubmitted(true)
+  }
+
+  return (
+    <>
+      <section className="bg-navy-950">
+        <div className="mx-auto grid max-w-7xl items-center gap-8 px-6 py-14 lg:grid-cols-2 lg:px-10">
+          <Reveal>
+            <h1 className="font-display text-5xl font-black uppercase tracking-tight text-white">
+              Contact <span className="text-accent-500">Us</span>
+            </h1>
+            <span className="mt-4 block h-1 w-16 bg-accent-500" />
+            <p className="mt-6 max-w-md text-slate-300">
+              We are here to answer your questions and provide the information you need. Reach
+              out to our team and we&rsquo;ll get back to you as soon as possible.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-x-8 gap-y-4">
+              {trust.map(({ icon: Icon, label }) => (
+                <div key={label} className="flex items-center gap-2 text-sm text-slate-200">
+                  <Icon size={20} className="text-accent-500" strokeWidth={1.75} />
+                  {label}
+                </div>
+              ))}
+            </div>
+          </Reveal>
+          <Reveal delay={0.15}>
+            <img
+              src="/assets/contact_truck.png"
+              alt="Astra Nova trucks at the yard"
+              className="w-full rounded-xl object-cover shadow-2xl"
+            />
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="mx-auto grid max-w-7xl gap-6 px-6 py-12 lg:grid-cols-[1.2fr_1fr] lg:px-10">
+        <Reveal className="rounded-xl bg-white p-8 shadow-lg">
+          <h2 className="font-display text-2xl font-bold text-navy-900">Send Us a Message</h2>
+          <span className="mt-2 block h-0.5 w-14 bg-accent-500" />
+
+          {submitted ? (
+            <div className="mt-8 rounded-md bg-emerald-50 p-6 text-sm font-medium text-emerald-700">
+              Thank you — your message has been received. Our team will get back to you shortly.
+            </div>
+          ) : (
+            <form className="mt-6 grid gap-5 sm:grid-cols-2" onSubmit={handleSubmit}>
+              <div>
+                <label className="mb-1.5 block text-sm font-medium text-navy-900">
+                  Full Name <span className="text-red-500">*</span>
+                </label>
+                <input required type="text" placeholder="Enter your full name" className={inputClass} />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-sm font-medium text-navy-900">
+                  Company Name <span className="text-red-500">*</span>
+                </label>
+                <input required type="text" placeholder="Enter your company name" className={inputClass} />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-sm font-medium text-navy-900">
+                  Email Address <span className="text-red-500">*</span>
+                </label>
+                <input required type="email" placeholder="Enter your email address" className={inputClass} />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-sm font-medium text-navy-900">
+                  Phone Number <span className="text-red-500">*</span>
+                </label>
+                <input required type="tel" placeholder="Enter your phone number" className={inputClass} />
+              </div>
+              <div className="sm:col-span-2">
+                <label className="mb-1.5 block text-sm font-medium text-navy-900">
+                  Subject <span className="text-red-500">*</span>
+                </label>
+                <select required defaultValue="" className={inputClass}>
+                  <option value="" disabled>
+                    Select a subject
+                  </option>
+                  <option>General Inquiry</option>
+                  <option>Request a Quote</option>
+                  <option>Partnership</option>
+                  <option>Careers</option>
+                </select>
+              </div>
+              <div className="sm:col-span-2">
+                <label className="mb-1.5 block text-sm font-medium text-navy-900">
+                  Your Message <span className="text-red-500">*</span>
+                </label>
+                <textarea required rows={4} placeholder="Type your message here..." className={inputClass} />
+              </div>
+              <div className="sm:col-span-2">
+                <button
+                  type="submit"
+                  className="inline-flex items-center gap-2 rounded-md bg-accent-500 px-7 py-3 text-sm font-bold uppercase tracking-wide text-navy-950 transition hover:bg-accent-400 active:scale-95"
+                >
+                  Send Message <ArrowRight size={16} />
+                </button>
+                <p className="mt-3 flex items-center gap-1.5 text-xs text-slate-500">
+                  <Lock size={12} /> Your information is secure and will only be used to respond to
+                  your inquiry.
+                </p>
+              </div>
+            </form>
+          )}
+        </Reveal>
+
+        <Reveal delay={0.1} className="flex flex-col gap-6">
+          <div className="rounded-xl border border-accent-500/40 bg-navy-900 p-8">
+            <h2 className="font-display text-lg font-bold uppercase text-accent-500">
+              Our Contact Information
+            </h2>
+            <span className="mt-2 block h-0.5 w-14 bg-accent-500" />
+            <div className="mt-6 space-y-5">
+              {info.map(({ icon: Icon, title, lines }) => (
+                <div key={title} className="flex items-start gap-4 border-b border-white/10 pb-4 last:border-none">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-2 border-accent-500 text-accent-500">
+                    <Icon size={18} strokeWidth={1.75} />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wide text-white">{title}</p>
+                    {lines.map((l) => (
+                      <p key={l} className="text-sm text-slate-300">
+                        {l}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="relative h-56 overflow-hidden rounded-xl border border-slate-200 bg-slate-100">
+            <div className="absolute inset-0 bg-[linear-gradient(120deg,#dce4ea_0%,#e9eef2_40%,#cfe0ea_100%)]" />
+            <span className="absolute left-[15%] top-[20%] text-[11px] font-medium text-slate-500">Kinondoni</span>
+            <span className="absolute left-[65%] top-[15%] text-[11px] font-medium text-slate-500">Oyster Bay</span>
+            <span className="absolute left-[68%] top-[35%] text-[11px] font-medium text-slate-500">Masaki</span>
+            <span className="absolute left-[75%] top-[70%] text-[11px] font-medium text-slate-500">Ilala</span>
+            <span className="absolute left-[70%] top-[85%] text-[11px] font-medium text-slate-500">Kigamboni</span>
+            <motion.div
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center"
+              animate={{ y: [0, -4, 0] }}
+              transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              <MapPin size={30} className="fill-navy-900 text-navy-900" />
+              <span className="mt-1 rounded bg-white/90 px-2 py-0.5 text-xs font-bold text-navy-900 shadow">
+                Dar es Salaam
+              </span>
+            </motion.div>
+          </div>
+        </Reveal>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-6 pb-16 lg:px-10">
+        <Reveal className="grid gap-8 rounded-xl bg-white p-8 shadow-lg sm:grid-cols-2 lg:grid-cols-5">
+          {bottomStrip.map(({ icon: Icon, title, desc }) => (
+            <div key={title} className="flex flex-col items-start gap-3">
+              <Icon size={26} className="text-accent-500" strokeWidth={1.75} />
+              <div>
+                <h3 className="font-display text-sm font-bold text-navy-900">{title}</h3>
+                <p className="mt-1 text-xs text-slate-600">{desc}</p>
+              </div>
+            </div>
+          ))}
+        </Reveal>
+      </section>
+    </>
+  )
+}
