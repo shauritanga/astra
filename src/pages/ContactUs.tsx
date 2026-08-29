@@ -9,15 +9,13 @@ import {
   Mail,
   Clock,
   ArrowRight,
-  Truck,
-  Globe,
-  ClipboardList,
-  HardHat,
   MessageCircle,
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import Reveal from '../components/Reveal'
-import { phoneDisplay, phoneTel } from '../data/contact'
+import { adminApiUrl } from '../data/api'
+import { useSiteContent } from '../context/SiteContent'
+import { serviceIconMap } from '../data/siteContent'
 
 const trust = [
   { icon: Headset, label: 'Responsive Team' },
@@ -26,30 +24,50 @@ const trust = [
   { icon: Lock, label: 'Your Cargo, Our Priority' },
 ]
 
-const info = [
-  { icon: MapPin, title: 'Head Office', lines: ['P.O. Box 8676,', 'Dar es Salaam, Tanzania'] },
-  { icon: Phone, title: 'Phone', lines: [phoneDisplay], href: `tel:${phoneTel}` },
-  { icon: Mail, title: 'Email', lines: ['operations@astranova.co.tz'] },
-  { icon: Clock, title: 'Business Hours', lines: ['Mon – Fri: 08:00 AM – 05:00 PM (EAT)', 'Saturday: 09:00 AM – 01:00 PM (EAT)'] },
-]
-
-const bottomStrip = [
-  { icon: Truck, title: 'Road Freight', desc: 'Reliable truck transport across East and Southern Africa.' },
-  { icon: Globe, title: 'Cross Border Cargo', desc: 'Seamless cargo movement across regional borders with care.' },
-  { icon: ClipboardList, title: 'Logistics Coordination', desc: 'End-to-end planning and coordination for smooth operations.' },
-  { icon: HardHat, title: 'Mining Supply Solutions', desc: 'Quality mining gear and supplies to keep your operations moving.' },
-  { icon: MessageCircle, title: "Let's Talk Logistics", desc: "We're ready to discuss how we can support your business." },
-]
-
 const inputClass =
   'w-full rounded-md border border-slate-300 bg-white px-4 py-2.5 text-sm text-navy-900 placeholder:text-slate-400 focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/30'
 
 export default function ContactUs() {
+  const { contact, services } = useSiteContent()
   const [submitted, setSubmitted] = useState(false)
+  const [error, setError] = useState('')
+  const [pending, setPending] = useState(false)
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  const info = [
+    { icon: MapPin, title: 'Head Office', lines: [contact.addressLine1, contact.addressLine2] },
+    { icon: Phone, title: 'Phone', lines: [contact.phoneDisplay], href: `tel:${contact.phoneTel}` },
+    { icon: Mail, title: 'Email', lines: [contact.emailOperations], href: `mailto:${contact.emailOperations}` },
+    { icon: Clock, title: 'Business Hours', lines: [contact.hoursWeekday, contact.hoursSaturday] },
+  ]
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    setSubmitted(true)
+    setError('')
+    setPending(true)
+    const form = new FormData(e.currentTarget)
+    try {
+      const res = await fetch(`${adminApiUrl}/api/public/contacts`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fullName: form.get('fullName'),
+          companyName: form.get('companyName'),
+          email: form.get('email'),
+          phone: form.get('phone'),
+          subject: form.get('subject'),
+          message: form.get('message'),
+        }),
+      })
+      if (!res.ok) {
+        const data = (await res.json().catch(() => null)) as { error?: string } | null
+        throw new Error(data?.error || 'Could not send the message.')
+      }
+      setSubmitted(true)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not send the message.')
+    } finally {
+      setPending(false)
+    }
   }
 
   return (
@@ -99,31 +117,31 @@ export default function ContactUs() {
                 <label className="mb-1.5 block text-sm font-medium text-navy-900">
                   Full Name <span className="text-red-500">*</span>
                 </label>
-                <input required type="text" placeholder="Enter your full name" className={inputClass} />
+                <input required name="fullName" type="text" placeholder="Enter your full name" className={inputClass} />
               </div>
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-navy-900">
                   Company Name <span className="text-red-500">*</span>
                 </label>
-                <input required type="text" placeholder="Enter your company name" className={inputClass} />
+                <input required name="companyName" type="text" placeholder="Enter your company name" className={inputClass} />
               </div>
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-navy-900">
                   Email Address <span className="text-red-500">*</span>
                 </label>
-                <input required type="email" placeholder="Enter your email address" className={inputClass} />
+                <input required name="email" type="email" placeholder="Enter your email address" className={inputClass} />
               </div>
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-navy-900">
                   Phone Number <span className="text-red-500">*</span>
                 </label>
-                <input required type="tel" placeholder="Enter your phone number" className={inputClass} />
+                <input required name="phone" type="tel" placeholder="Enter your phone number" className={inputClass} />
               </div>
               <div className="sm:col-span-2">
                 <label className="mb-1.5 block text-sm font-medium text-navy-900">
                   Subject <span className="text-red-500">*</span>
                 </label>
-                <select required defaultValue="" className={inputClass}>
+                <select required name="subject" defaultValue="" className={inputClass}>
                   <option value="" disabled>
                     Select a subject
                   </option>
@@ -137,14 +155,16 @@ export default function ContactUs() {
                 <label className="mb-1.5 block text-sm font-medium text-navy-900">
                   Your Message <span className="text-red-500">*</span>
                 </label>
-                <textarea required rows={4} placeholder="Type your message here..." className={inputClass} />
+                <textarea required name="message" rows={4} placeholder="Type your message here..." className={inputClass} />
               </div>
               <div className="sm:col-span-2">
+                {error ? <p className="mb-3 text-sm text-red-600">{error}</p> : null}
                 <button
                   type="submit"
-                  className="inline-flex items-center gap-2 rounded-md bg-accent-500 px-7 py-3 text-sm font-bold uppercase tracking-wide text-navy-950 transition hover:bg-accent-400 active:scale-95"
+                  disabled={pending}
+                  className="inline-flex items-center gap-2 rounded-md bg-accent-500 px-7 py-3 text-sm font-bold uppercase tracking-wide text-navy-950 transition hover:bg-accent-400 active:scale-95 disabled:opacity-60"
                 >
-                  Send Message <ArrowRight size={16} />
+                  {pending ? 'Sending…' : 'Send Message'} <ArrowRight size={16} />
                 </button>
                 <p className="mt-3 flex items-center gap-1.5 text-xs text-slate-500">
                   <Lock size={12} /> Your information is secure and will only be used to respond to
@@ -209,15 +229,25 @@ export default function ContactUs() {
 
       <section className="mx-auto max-w-7xl px-6 pb-16 lg:px-10">
         <Reveal className="grid gap-8 rounded-xl bg-white p-8 shadow-lg sm:grid-cols-2 lg:grid-cols-5">
-          {bottomStrip.map(({ icon: Icon, title, desc }) => (
+          {services.map(({ iconKey, title, summary }) => {
+            const Icon = serviceIconMap[iconKey] ?? MessageCircle
+            return (
             <div key={title} className="flex flex-col items-start gap-3">
               <Icon size={26} className="text-accent-500" strokeWidth={1.75} />
               <div>
                 <h3 className="font-display text-sm font-bold text-navy-900">{title}</h3>
-                <p className="mt-1 text-xs text-slate-600">{desc}</p>
+                <p className="mt-1 text-xs text-slate-600">{summary}</p>
               </div>
             </div>
-          ))}
+            )
+          })}
+          <div className="flex flex-col items-start gap-3">
+            <MessageCircle size={26} className="text-accent-500" strokeWidth={1.75} />
+            <div>
+              <h3 className="font-display text-sm font-bold text-navy-900">Let&rsquo;s Talk Logistics</h3>
+              <p className="mt-1 text-xs text-slate-600">We&rsquo;re ready to discuss how we can support your business.</p>
+            </div>
+          </div>
         </Reveal>
       </section>
     </>

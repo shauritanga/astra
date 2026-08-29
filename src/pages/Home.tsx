@@ -6,15 +6,14 @@ import {
   HardHat,
   Wheat,
   ArrowRight,
-  Truck,
-  Globe,
-  ClipboardList,
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { motion, type Variants } from 'framer-motion'
 import SectionHeading from '../components/SectionHeading'
 import Reveal from '../components/Reveal'
 import { whyPoints } from '../data/why'
+import { useSiteContent } from '../context/SiteContent'
+import { serviceIconMap } from '../data/siteContent'
 
 const container: Variants = {
   hidden: {},
@@ -25,33 +24,6 @@ const item: Variants = {
   hidden: { opacity: 0, y: 24 },
   show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
 }
-
-const homeServices = [
-  {
-    icon: Truck,
-    image: '/assets/quote_truck.png',
-    title: 'Road Freight',
-    desc: 'Reliable road transportation for commercial and industrial cargo across Tanzania and the wider East and Southern African region.',
-  },
-  {
-    icon: Globe,
-    image: '/assets/border_crossing_tanzania.png',
-    title: 'Cross-Border Cargo Movement',
-    desc: 'Coordinated cargo movements along regional trade corridors, with documentation and border processes handled as part of the journey.',
-  },
-  {
-    icon: ClipboardList,
-    image: '/assets/astra_nova_worker.png',
-    title: 'Logistics Coordination',
-    desc: 'Routing, scheduling, documentation and communication brought together so shipments stay visible and on track.',
-  },
-  {
-    icon: HardHat,
-    image: '/assets/mining_truck_excavator.png',
-    title: 'Mining Supply Solutions',
-    desc: 'Sourcing and supplying mining equipment, gear and materials — and moving them to remote and cross-border sites.',
-  },
-]
 
 const industries = [
   {
@@ -87,6 +59,8 @@ const industries = [
 ]
 
 export default function Home() {
+  const { services } = useSiteContent()
+
   return (
     <>
       <section className="relative overflow-hidden bg-navy-950">
@@ -148,7 +122,9 @@ export default function Home() {
           </Reveal>
 
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {homeServices.map(({ icon: Icon, image, title, desc }, i) => (
+            {services.map(({ iconKey, imageUrl, title, summary }, i) => {
+              const Icon = serviceIconMap[iconKey] ?? HardHat
+              return (
               <Reveal key={title} delay={i * 0.08}>
                 <Link to="/services" className="block h-full">
                   <motion.article
@@ -158,7 +134,7 @@ export default function Home() {
                   >
                     <div className="overflow-hidden">
                       <img
-                        src={image}
+                        src={imageUrl}
                         alt=""
                         className="h-36 w-full object-cover transition-transform duration-500 hover:scale-110"
                       />
@@ -171,12 +147,13 @@ export default function Home() {
                         {title}
                       </h3>
                       <span className="mt-2 h-0.5 w-10 bg-accent-500" />
-                      <p className="mt-4 text-left text-sm leading-relaxed text-slate-300">{desc}</p>
+                      <p className="mt-4 text-left text-sm leading-relaxed text-slate-300">{summary}</p>
                     </div>
                   </motion.article>
                 </Link>
               </Reveal>
-            ))}
+              )
+            })}
           </div>
         </div>
       </section>

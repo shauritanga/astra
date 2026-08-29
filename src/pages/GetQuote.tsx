@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { Headset, Phone, Mail, Clock, ArrowRight } from 'lucide-react'
-import { phoneDisplay, phoneTel } from '../data/contact'
+import { adminApiUrl } from '../data/api'
+import { useSiteContent } from '../context/SiteContent'
 import CtaStrip from '../components/CtaStrip'
 import Reveal from '../components/Reveal'
 
@@ -8,11 +9,39 @@ const inputClass =
   'w-full rounded-md border border-white/15 bg-navy-950 px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500/30'
 
 export default function GetQuote() {
+  const { contact, services } = useSiteContent()
   const [submitted, setSubmitted] = useState(false)
+  const [error, setError] = useState('')
+  const [pending, setPending] = useState(false)
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    setSubmitted(true)
+    setError('')
+    setPending(true)
+    const form = new FormData(e.currentTarget)
+    try {
+      const res = await fetch(`${adminApiUrl}/api/public/quotes`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          companyName: form.get('companyName'),
+          contactPerson: form.get('contactPerson'),
+          phone: form.get('phone'),
+          email: form.get('email'),
+          serviceType: form.get('serviceType'),
+          details: form.get('details'),
+        }),
+      })
+      if (!res.ok) {
+        const data = (await res.json().catch(() => null)) as { error?: string } | null
+        throw new Error(data?.error || 'Could not send the request.')
+      }
+      setSubmitted(true)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not send the request.')
+    } finally {
+      setPending(false)
+    }
   }
 
   return (
@@ -51,15 +80,15 @@ export default function GetQuote() {
               <div className="mt-4 flex flex-wrap gap-x-8 gap-y-3 text-sm text-slate-200">
                 <span className="flex items-center gap-2">
                   <Phone size={15} className="text-accent-500" />
-                  <a href={`tel:${phoneTel}`} className="hover:text-accent-500">
-                    {phoneDisplay}
+                  <a href={`tel:${contact.phoneTel}`} className="hover:text-accent-500">
+                    {contact.phoneDisplay}
                   </a>
                 </span>
                 <span className="flex items-center gap-2">
-                  <Mail size={15} className="text-accent-500" /> operations@astranova.co.tz
+                  <Mail size={15} className="text-accent-500" /> {contact.emailOperations}
                 </span>
                 <span className="flex items-center gap-2">
-                  <Clock size={15} className="text-accent-500" /> Mon – Fri: 08:00 AM – 05:00 PM (EAT)
+                  <Clock size={15} className="text-accent-500" /> {contact.hoursWeekday}
                 </span>
               </div>
             </div>
@@ -81,38 +110,37 @@ export default function GetQuote() {
                   <label className="mb-1.5 block text-sm font-medium text-slate-200">
                     Company Name <span className="text-accent-500">*</span>
                   </label>
-                  <input required type="text" placeholder="Enter company name" className={inputClass} />
+                  <input required name="companyName" type="text" placeholder="Enter company name" className={inputClass} />
                 </div>
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-slate-200">
                     Contact Person <span className="text-accent-500">*</span>
                   </label>
-                  <input required type="text" placeholder="Enter contact person name" className={inputClass} />
+                  <input required name="contactPerson" type="text" placeholder="Enter contact person name" className={inputClass} />
                 </div>
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-slate-200">
                     Phone Number <span className="text-accent-500">*</span>
                   </label>
-                  <input required type="tel" placeholder="Enter phone number" className={inputClass} />
+                  <input required name="phone" type="tel" placeholder="Enter phone number" className={inputClass} />
                 </div>
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-slate-200">
                     Email Address <span className="text-accent-500">*</span>
                   </label>
-                  <input required type="email" placeholder="Enter email address" className={inputClass} />
+                  <input required name="email" type="email" placeholder="Enter email address" className={inputClass} />
                 </div>
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-slate-200">
                     Service Type <span className="text-accent-500">*</span>
                   </label>
-                  <select required defaultValue="" className={inputClass}>
+                  <select required name="serviceType" defaultValue="" className={inputClass}>
                     <option value="" disabled>
                       Select service type
                     </option>
-                    <option>Road Freight</option>
-                    <option>Cross-Border Cargo Movement</option>
-                    <option>Logistics Coordination</option>
-                    <option>Mining Supply Solutions</option>
+                    {services.map((service) => (
+                      <option key={service.id}>{service.title}</option>
+                    ))}
                   </select>
                 </div>
                 <div>
@@ -121,16 +149,19 @@ export default function GetQuote() {
                   </label>
                   <textarea
                     required
+                    name="details"
                     rows={4}
                     placeholder="Provide details pertaining to the service you require"
                     className={inputClass}
                   />
                 </div>
+                {error ? <p className="text-sm text-red-400">{error}</p> : null}
                 <button
                   type="submit"
-                  className="flex w-full items-center justify-center gap-2 rounded-md bg-accent-500 px-7 py-3.5 text-sm font-bold uppercase tracking-wide text-navy-950 transition hover:bg-accent-400 active:scale-95"
+                  disabled={pending}
+                  className="flex w-full items-center justify-center gap-2 rounded-md bg-accent-500 px-7 py-3.5 text-sm font-bold uppercase tracking-wide text-navy-950 transition hover:bg-accent-400 active:scale-95 disabled:opacity-60"
                 >
-                  Submit Request <ArrowRight size={16} />
+                  {pending ? 'Sending…' : 'Submit Request'} <ArrowRight size={16} />
                 </button>
               </form>
             )}

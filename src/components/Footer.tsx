@@ -2,13 +2,8 @@ import { Link } from 'react-router-dom'
 import { Phone, Mail, MapPin } from 'lucide-react'
 import Reveal from './Reveal'
 import { navItems } from '../data/nav'
-import { phoneDisplay, phoneTel } from '../data/contact'
-
-const contacts = [
-  { icon: Phone, label: phoneDisplay, href: `tel:${phoneTel}` },
-  { icon: Mail, label: 'info@astranova.co.tz', href: 'mailto:info@astranova.co.tz' },
-  { icon: MapPin, label: 'P.O. Box 8676, Dar es Salaam, Tanzania' },
-]
+import { useSiteContent } from '../context/SiteContent'
+import type { SocialNetwork } from '../data/siteContent'
 
 const extraLinks = [
   { label: 'Why Astra Nova', path: '/why-astra-nova' },
@@ -58,15 +53,30 @@ function XIcon({ size = 16 }: { size?: number }) {
   )
 }
 
-const socials = [
-  { name: 'Facebook', href: '#', icon: FacebookIcon },
-  { name: 'Instagram', href: '#', icon: InstagramIcon },
-  { name: 'LinkedIn', href: '#', icon: LinkedInIcon },
-  { name: 'X', href: '#', icon: XIcon },
-  { name: 'TikTok', href: '#', icon: TikTokIcon },
-]
+const socialIcons: Record<SocialNetwork, typeof FacebookIcon> = {
+  facebook: FacebookIcon,
+  instagram: InstagramIcon,
+  linkedin: LinkedInIcon,
+  x: XIcon,
+  tiktok: TikTokIcon,
+}
+
+const socialNames: Record<SocialNetwork, string> = {
+  facebook: 'Facebook',
+  instagram: 'Instagram',
+  linkedin: 'LinkedIn',
+  x: 'X',
+  tiktok: 'TikTok',
+}
 
 export default function Footer() {
+  const { contact, socials } = useSiteContent()
+  const contacts = [
+    { icon: Phone, label: contact.phoneDisplay, href: `tel:${contact.phoneTel}` },
+    { icon: Mail, label: contact.emailInfo, href: `mailto:${contact.emailInfo}` },
+    { icon: MapPin, label: `${contact.addressLine1} ${contact.addressLine2}`.replace(/\s+/g, ' ').trim() },
+  ]
+
   return (
     <footer className="border-t border-accent-500/30 bg-navy-950">
       <div className="mx-auto grid max-w-7xl gap-10 px-6 py-12 sm:grid-cols-2 lg:grid-cols-3 lg:divide-x lg:divide-accent-500/20 lg:px-10">
@@ -78,22 +88,26 @@ export default function Footer() {
               Across East and Southern Africa
             </span>
           </p>
-          <div className="mt-5 flex items-center gap-2.5" aria-label="Social networks">
-            {socials.map(({ name, href, icon: Icon }) => {
-              const external = href.startsWith('http')
-              return (
-                <a
-                  key={name}
-                  href={href}
-                  {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                  aria-label={name}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-accent-500 text-accent-500 transition-colors hover:bg-accent-500 hover:text-navy-950"
-                >
-                  <Icon size={16} />
-                </a>
-              )
-            })}
-          </div>
+          {socials.length > 0 ? (
+            <div className="mt-5 flex items-center gap-2.5" aria-label="Social networks">
+              {socials.map(({ network, url }) => {
+                const Icon = socialIcons[network]
+                if (!Icon) return null
+                return (
+                  <a
+                    key={network}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={socialNames[network]}
+                    className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-accent-500 text-accent-500 transition-colors hover:bg-accent-500 hover:text-navy-950"
+                  >
+                    <Icon size={16} />
+                  </a>
+                )
+              })}
+            </div>
+          ) : null}
         </Reveal>
 
         <Reveal delay={0.1} className="lg:px-8">

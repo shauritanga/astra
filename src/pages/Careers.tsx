@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { CheckCircle2, Users, Mail, ArrowRight, MapPin } from 'lucide-react'
 import { motion } from 'framer-motion'
 import CtaStrip from '../components/CtaStrip'
 import Reveal from '../components/Reveal'
+import { useSiteContent } from '../context/SiteContent'
 
 const perks = [
   'Be part of a growing logistics company with regional impact',
@@ -10,14 +12,10 @@ const perks = [
   'Make a difference in connecting businesses across Africa',
 ]
 
-const openings = [
-  { title: 'Logistics Coordinator', dept: 'Operations' },
-  { title: 'Transport Planner', dept: 'Operations' },
-  { title: 'Fleet Maintenance Supervisor', dept: 'Fleet & Maintenance' },
-  { title: 'Business Development Executive', dept: 'Business Development' },
-]
-
 export default function Careers() {
+  const { jobs, contact } = useSiteContent()
+  const [openId, setOpenId] = useState<string | null>(null)
+
   return (
     <>
       <section className="relative overflow-hidden bg-navy-950">
@@ -107,27 +105,38 @@ export default function Careers() {
               Explore current openings and find a role that matches your skills and passion.
             </p>
             <div className="mt-6 divide-y divide-slate-300">
-              {openings.map((job) => (
-                <div
-                  key={job.title}
-                  className="flex flex-wrap items-center justify-between gap-3 py-4 transition-colors hover:bg-slate-200/60"
-                >
-                  <div>
-                    <p className="font-semibold text-navy-900">{job.title}</p>
-                    <p className="mt-1 flex items-center gap-1 text-xs text-slate-500">
-                      <MapPin size={12} /> Dar es Salaam, Tanzania &nbsp;·&nbsp; {job.dept}
-                    </p>
-                  </div>
-                  <motion.button
-                    type="button"
-                    whileHover={{ x: 3 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="flex items-center gap-1.5 whitespace-nowrap rounded-md bg-navy-900 px-4 py-2 text-xs font-bold uppercase tracking-wide text-accent-500"
-                  >
-                    View Details <ArrowRight size={13} />
-                  </motion.button>
-                </div>
-              ))}
+              {jobs.length === 0 ? (
+                <p className="py-6 text-sm text-slate-600">There are no open roles right now.</p>
+              ) : (
+                jobs.map((job) => {
+                  const open = openId === job.id
+                  return (
+                    <div key={job.id} className="py-4">
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                          <p className="font-semibold text-navy-900">{job.title}</p>
+                          <p className="mt-1 flex items-center gap-1 text-xs text-slate-500">
+                            <MapPin size={12} /> {job.location} &nbsp;·&nbsp; {job.department}
+                          </p>
+                        </div>
+                        <motion.button
+                          type="button"
+                          whileHover={{ x: 3 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => setOpenId(open ? null : job.id)}
+                          aria-expanded={open}
+                          className="flex items-center gap-1.5 whitespace-nowrap rounded-md bg-navy-900 px-4 py-2 text-xs font-bold uppercase tracking-wide text-accent-500"
+                        >
+                          {open ? 'Hide details' : 'View details'} <ArrowRight size={13} />
+                        </motion.button>
+                      </div>
+                      {open && job.description ? (
+                        <p className="mt-3 text-sm leading-relaxed text-slate-600">{job.description}</p>
+                      ) : null}
+                    </div>
+                  )
+                })
+              )}
             </div>
           </div>
         </Reveal>
@@ -142,7 +151,7 @@ export default function Careers() {
               Send us your CV and tell us how you can add value to our team.
             </p>
             <a
-              href="mailto:info@astranova.co.tz"
+              href={`mailto:${contact.emailInfo}`}
               className="inline-flex w-fit items-center gap-2 rounded-md border border-accent-500 px-5 py-2.5 text-sm font-bold uppercase tracking-wide text-accent-500 transition hover:bg-accent-500 hover:text-navy-950 active:scale-95"
             >
               Send Your CV <ArrowRight size={16} />

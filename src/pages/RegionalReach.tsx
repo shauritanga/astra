@@ -1,8 +1,5 @@
 import {
   Truck,
-  ClipboardList,
-  CalendarClock,
-  HardHat,
   Users,
   ShieldCheck,
   Handshake,
@@ -13,14 +10,8 @@ import {
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import Reveal from '../components/Reveal'
-import { phoneDisplay, phoneTel } from '../data/contact'
-
-const connections = [
-  { icon: Truck, label: 'Road Freight' },
-  { icon: ClipboardList, label: 'Cross-Border Cargo Movement' },
-  { icon: CalendarClock, label: 'Logistics Coordination & Planning' },
-  { icon: HardHat, label: 'Mining Supply Solutions' },
-]
+import { useSiteContent } from '../context/SiteContent'
+import { serviceIconMap } from '../data/siteContent'
 
 const commitments = [
   {
@@ -38,6 +29,8 @@ const commitments = [
 ]
 
 export default function RegionalReach() {
+  const { contact, services } = useSiteContent()
+
   return (
     <>
       <section className="bg-navy-950">
@@ -92,9 +85,11 @@ export default function RegionalReach() {
               the Region
             </h2>
             <ul className="mt-5 space-y-5">
-              {connections.map(({ icon: Icon, label }, i) => (
+              {services.map(({ iconKey, title }, i) => {
+                const Icon = serviceIconMap[iconKey] ?? Truck
+                return (
                 <motion.li
-                  key={label}
+                  key={title}
                   className="flex items-center gap-3"
                   initial={{ opacity: 0, x: 12 }}
                   whileInView={{ opacity: 1, x: 0 }}
@@ -104,9 +99,10 @@ export default function RegionalReach() {
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border-2 border-accent-500 text-accent-500">
                     <Icon size={18} strokeWidth={1.75} />
                   </div>
-                  <span className="text-sm text-white">{label}</span>
+                  <span className="text-sm text-white">{title}</span>
                 </motion.li>
-              ))}
+                )
+              })}
             </ul>
           </Reveal>
         </div>
@@ -157,17 +153,17 @@ export default function RegionalReach() {
           <span className="hidden h-10 w-px bg-slate-300 sm:block" />
           <div className="flex items-center gap-2 text-sm text-navy-900">
             <Phone size={16} className="text-navy-900" />
-            <a href={`tel:${phoneTel}`} className="hover:text-accent-600">
-              {phoneDisplay}
+            <a href={`tel:${contact.phoneTel}`} className="hover:text-accent-600">
+              {contact.phoneDisplay}
             </a>
           </div>
           <span className="hidden h-10 w-px bg-slate-300 sm:block" />
           <div className="flex items-center gap-2 text-sm text-navy-900">
-            <Mail size={16} className="text-navy-900" /> info@astranova.co.tz
+            <Mail size={16} className="text-navy-900" /> {contact.emailInfo}
           </div>
           <span className="hidden h-10 w-px bg-slate-300 sm:block" />
           <div className="flex items-center gap-2 text-sm text-navy-900">
-            <Clock size={16} className="text-navy-900" /> Mon – Fri: 08:00 AM – 05:00 PM (EAT)
+            <Clock size={16} className="text-navy-900" /> {contact.hoursWeekday}
           </div>
         </div>
       </section>
