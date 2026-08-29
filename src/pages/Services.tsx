@@ -7,7 +7,7 @@ import Reveal from '../components/Reveal'
 const services = [
   {
     icon: Truck,
-    image: '/assets/hero_truck.png',
+    image: '/assets/quote_truck.png',
     title: 'Road Freight',
     paragraphs: [
       'We provide reliable road transportation for commercial and industrial cargo across Tanzania and the wider East and Southern African region. Our road freight solutions are structured around the specific requirements of each shipment, including cargo type, destination, timing and route.',
@@ -16,7 +16,7 @@ const services = [
   },
   {
     icon: Globe,
-    image: '/assets/contact_truck.png',
+    image: '/assets/border_crossing_tanzania.png',
     title: 'Cross-Border Cargo Movement',
     paragraphs: [
       'Moving cargo across borders requires more than a truck and a destination. It involves careful coordination, accurate documentation, border procedures and close communication between everyone involved in the shipment.',
@@ -26,7 +26,7 @@ const services = [
   },
   {
     icon: ClipboardList,
-    image: '/assets/quote_truck.png',
+    image: '/assets/astra_nova_worker.png',
     title: 'Logistics Coordination & Planning',
     paragraphs: [
       'Effective logistics starts long before a vehicle leaves the yard. We provide logistics coordination and planning services that bring together transportation, routing, scheduling, documentation and communication into one organized process.',
@@ -36,7 +36,7 @@ const services = [
   },
   {
     icon: HardHat,
-    image: '/assets/hero_truck.png',
+    image: '/assets/mining_truck_excavator.png',
     title: 'Mining Supply Solutions',
     paragraphs: [
       'We provide supply support to the mining sector, with a focus on sourcing and supplying quality mining-related equipment, gear and operational materials.',

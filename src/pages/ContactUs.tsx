@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import Reveal from '../components/Reveal'
+import { phoneDisplay, phoneTel } from '../data/contact'
 
 const trust = [
   { icon: Headset, label: 'Responsive Team' },
@@ -27,7 +28,7 @@ const trust = [
 
 const info = [
   { icon: MapPin, title: 'Head Office', lines: ['P.O. Box 8676,', 'Dar es Salaam, Tanzania'] },
-  { icon: Phone, title: 'Phone', lines: ['+255 000 000 000'] },
+  { icon: Phone, title: 'Phone', lines: [phoneDisplay], href: `tel:${phoneTel}` },
   { icon: Mail, title: 'Email', lines: ['operations@astranova.co.tz'] },
   { icon: Clock, title: 'Business Hours', lines: ['Mon – Fri: 08:00 AM – 05:00 PM (EAT)', 'Saturday: 09:00 AM – 01:00 PM (EAT)'] },
 ]
@@ -161,18 +162,24 @@ export default function ContactUs() {
             </h2>
             <span className="mt-2 block h-0.5 w-14 bg-accent-500" />
             <div className="mt-6 space-y-5">
-              {info.map(({ icon: Icon, title, lines }) => (
+              {info.map(({ icon: Icon, title, lines, href }) => (
                 <div key={title} className="flex items-start gap-4 border-b border-white/10 pb-4 last:border-none">
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-2 border-accent-500 text-accent-500">
                     <Icon size={18} strokeWidth={1.75} />
                   </div>
                   <div>
                     <p className="text-xs font-bold uppercase tracking-wide text-white">{title}</p>
-                    {lines.map((l) => (
-                      <p key={l} className="text-sm text-slate-300">
-                        {l}
-                      </p>
-                    ))}
+                    {lines.map((l) =>
+                      href ? (
+                        <a key={l} href={href} className="block text-sm text-slate-300 hover:text-accent-500">
+                          {l}
+                        </a>
+                      ) : (
+                        <p key={l} className="text-sm text-slate-300">
+                          {l}
+                        </p>
+                      ),
+                    )}
                   </div>
                 </div>
               ))}

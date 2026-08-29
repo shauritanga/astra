@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { Headset, Phone, Mail, Clock, ArrowRight } from 'lucide-react'
+import { phoneDisplay, phoneTel } from '../data/contact'
 import CtaStrip from '../components/CtaStrip'
 import Reveal from '../components/Reveal'
 
@@ -49,7 +50,10 @@ export default function GetQuote() {
               </div>
               <div className="mt-4 flex flex-wrap gap-x-8 gap-y-3 text-sm text-slate-200">
                 <span className="flex items-center gap-2">
-                  <Phone size={15} className="text-accent-500" /> +255 000 000 000
+                  <Phone size={15} className="text-accent-500" />
+                  <a href={`tel:${phoneTel}`} className="hover:text-accent-500">
+                    {phoneDisplay}
+                  </a>
                 </span>
                 <span className="flex items-center gap-2">
                   <Mail size={15} className="text-accent-500" /> operations@astranova.co.tz

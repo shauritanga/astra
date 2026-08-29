@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import Reveal from '../components/Reveal'
+import { phoneDisplay, phoneTel } from '../data/contact'
 
 const connections = [
   { icon: Truck, label: 'Road Freight' },
@@ -155,7 +156,10 @@ export default function RegionalReach() {
           </div>
           <span className="hidden h-10 w-px bg-slate-300 sm:block" />
           <div className="flex items-center gap-2 text-sm text-navy-900">
-            <Phone size={16} className="text-navy-900" /> +255 000 000 000
+            <Phone size={16} className="text-navy-900" />
+            <a href={`tel:${phoneTel}`} className="hover:text-accent-600">
+              {phoneDisplay}
+            </a>
           </div>
           <span className="hidden h-10 w-px bg-slate-300 sm:block" />
           <div className="flex items-center gap-2 text-sm text-navy-900">

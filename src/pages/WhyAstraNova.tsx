@@ -1,48 +1,8 @@
 import { Link } from 'react-router-dom'
-import {
-  ClipboardCheck,
-  MessageCircle,
-  Route,
-  Puzzle,
-  Handshake,
-  ArrowRight,
-} from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
-import AfricaIcon from '../components/icons/AfricaIcon'
 import Reveal from '../components/Reveal'
-
-const points = [
-  {
-    icon: AfricaIcon,
-    title: 'Regional Understanding',
-    desc: 'Based in Tanzania, we know the East African logistics network and understand the practical demands of regional road transportation and cross-border operations.',
-  },
-  {
-    icon: ClipboardCheck,
-    title: 'Practical Approach',
-    desc: 'We focus on what works. We take the time to understand your cargo, destination, timeline and operational needs before determining the right solution.',
-  },
-  {
-    icon: MessageCircle,
-    title: 'Responsive Communication',
-    desc: 'We maintain clear and timely communication with clients and partners throughout the movement, keeping you informed every step of the way.',
-  },
-  {
-    icon: Route,
-    title: 'Flexible Solutions',
-    desc: 'Not every shipment is the same. We adapt our approach to suit different cargo requirements, destinations and delivery schedules — including specialized mining supplies.',
-  },
-  {
-    icon: Puzzle,
-    title: 'Reliable Coordination',
-    desc: 'We coordinate all elements of a shipment — transportation, routing, documentation, border processes, suppliers and delivery — to ensure smooth movement from origin to destination.',
-  },
-  {
-    icon: Handshake,
-    title: 'Long-Term Relationships',
-    desc: 'We aim to build lasting relationships with clients who can rely on us as their logistics and mining supply needs grow.',
-  },
-]
+import { whyPoints } from '../data/why'
 
 export default function WhyAstraNova() {
   return (
@@ -81,7 +41,7 @@ export default function WhyAstraNova() {
 
       <section className="bg-slate-100">
         <div className="mx-auto max-w-5xl divide-y divide-slate-300 px-6 lg:px-10">
-          {points.map(({ icon: Icon, title, desc }, i) => (
+          {whyPoints.map(({ icon: Icon, title, desc }, i) => (
             <Reveal key={title} delay={i * 0.06}>
               <motion.div
                 className="flex items-start gap-6 py-8"
