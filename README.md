@@ -1,32 +1,15 @@
-# React + TypeScript + Vite
+# Astra Nova Holdings
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Monorepo with two independent apps:
 
-Currently, two official plugins are available:
+- **`website/`** — public marketing site (Vite + React + TypeScript SPA), deployed at `astranova.co.tz`. Static build served via `serve`/PM2 or any static host.
+- **`dashboard/`** — admin panel (Next.js + PostgreSQL), deployed at `admin.astranova.co.tz`. Requires a Node runtime and a Postgres database.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Each app has its own `package.json`, dependencies, and `ecosystem.config.cjs` — install and run them independently:
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+cd website && npm install && npm run dev      # http://localhost:5173
+cd dashboard && npm install && npm run dev     # http://localhost:3400
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+See `website/README.md` and `dashboard/README.md` for app-specific details.

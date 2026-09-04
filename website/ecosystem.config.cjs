@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'astra',
-      cwd: '/var/www/astra',
+      cwd: '/var/www/astra/website',
       script: './node_modules/.bin/serve',
       args: '-s dist -l tcp://127.0.0.1:3300',
       instances: 1,
