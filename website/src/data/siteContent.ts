@@ -162,7 +162,7 @@ export function paragraphs(body: string) {
 }
 
 export async function fetchSiteContent(): Promise<SiteContent> {
-  const res = await fetch(`${adminApiUrl}/api/public/content`)
+  const res = await fetch(`${adminApiUrl}/api/public/content.php`)
   if (!res.ok) throw new Error('Could not load site content')
   return (await res.json()) as SiteContent
 }

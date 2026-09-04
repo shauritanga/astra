@@ -10,7 +10,9 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+*.zip
 *.local
+config.local.php
 .env
 
 # Editor directories and files

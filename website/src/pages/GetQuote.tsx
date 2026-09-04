@@ -20,7 +20,7 @@ export default function GetQuote() {
     setPending(true)
     const form = new FormData(e.currentTarget)
     try {
-      const res = await fetch(`${adminApiUrl}/api/public/quotes`, {
+      const res = await fetch(`${adminApiUrl}/api/public/quotes.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

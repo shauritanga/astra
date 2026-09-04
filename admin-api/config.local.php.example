@@ -1,0 +1,18 @@
+<?php
+// Copy this file to config.local.php (gitignored via *.local) and fill in real values.
+// Used as a fallback when the real environment variables aren't set by the host.
+
+return [
+    'DB_HOST' => '127.0.0.1',
+    'DB_NAME' => 'astra_db',
+    'DB_USER' => 'astra',
+    'DB_PASS' => 'change-me',
+
+    'ADMIN_SESSION_NAME' => 'astra_admin_sess',
+    'PUBLIC_ORIGINS' => 'http://localhost:5173,http://127.0.0.1:5173,https://astranova.co.tz,https://www.astranova.co.tz',
+
+    // Used only by db/seed-admin.php to create the first admin user.
+    'ADMIN_EMAIL' => 'admin@astranova.co.tz',
+    'ADMIN_PASSWORD' => 'change-me-strong-password',
+    'ADMIN_NAME' => 'Astra Admin',
+];

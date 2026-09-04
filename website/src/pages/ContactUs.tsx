@@ -46,7 +46,7 @@ export default function ContactUs() {
     setPending(true)
     const form = new FormData(e.currentTarget)
     try {
-      const res = await fetch(`${adminApiUrl}/api/public/contacts`, {
+      const res = await fetch(`${adminApiUrl}/api/public/contacts.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
