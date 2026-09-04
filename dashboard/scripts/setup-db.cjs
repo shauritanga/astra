@@ -50,8 +50,8 @@ async function main() {
      ) values (1, $1, $2, $3, $4, $5, $6, $7, $8)
      on conflict (id) do nothing`,
     [
-      '+255 629 593 331',
-      '+255629593331',
+      '+255 765 808 899',
+      '+255765808899',
       'info@astranova.co.tz',
       'operations@astranova.co.tz',
       'P.O. Box 8676,',

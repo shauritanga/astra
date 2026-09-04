@@ -54,8 +54,8 @@ export const serviceIconMap: Record<ServiceIconKey, LucideIcon> = {
 
 export const fallbackContent: SiteContent = {
   contact: {
-    phoneDisplay: '+255 629 593 331',
-    phoneTel: '+255629593331',
+    phoneDisplay: '+255 765 808 899',
+    phoneTel: '+255765808899',
     emailInfo: 'info@astranova.co.tz',
     emailOperations: 'operations@astranova.co.tz',
     addressLine1: 'P.O. Box 8676,',

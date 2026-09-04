@@ -1,4 +1,4 @@
 export { fallbackContent } from './siteContent'
 
-export const phoneDisplay = '+255 629 593 331'
-export const phoneTel = '+255629593331'
+export const phoneDisplay = '+255 765 808 899'
+export const phoneTel = '+255765808899'
